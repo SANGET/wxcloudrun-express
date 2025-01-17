@@ -13,9 +13,9 @@ app.use(cors());
 app.use(logger);
 
 // 首页
-app.get("/", async (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
+// app.get("/", async (req, res) => {
+//   res.sendFile(path.join(__dirname, "index.html"));
+// });
 
 // 更新计数
 app.post("/api/count", async (req, res) => {
@@ -47,6 +47,23 @@ app.get("/api/wx_openid", async (req, res) => {
   if (req.headers["x-wx-source"]) {
     res.send(req.headers["x-wx-openid"]);
   }
+});
+
+app.get("/api/component_access_token", async (req, res) => {
+  const response = await fetch(
+    "http://127.0.0.1:8081/inner/component-access-token"
+  );
+  const data = await response.json();
+  res.send(data);
+});
+
+app.get("/api/authorizer_access_token", async (req, res) => {
+  const appid = req.query.appid;
+  const response = await fetch(
+    `http://127.0.0.1:8081/inner/authorizer-access-token?appid=${appid}`
+  );
+  const data = await response.json();
+  res.send(data);
 });
 
 const port = process.env.PORT || 80;
