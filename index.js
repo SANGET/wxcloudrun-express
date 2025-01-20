@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const axios = require("axios");
 const { init: initDB, Counter } = require("./db");
 
 const logger = morgan("tiny");
@@ -50,19 +51,19 @@ app.get("/api/wx_openid", async (req, res) => {
 });
 
 app.get("/api/component_access_token", async (req, res) => {
-  const response = await fetch(
+  const response = await axios.get(
     "http://127.0.0.1:8081/inner/component-access-token"
   );
-  const data = await response.json();
+  const data = response.data;
   res.send(data);
 });
 
 app.get("/api/authorizer_access_token", async (req, res) => {
   const appid = req.query.appid;
-  const response = await fetch(
+  const response = await axios.get(
     `http://127.0.0.1:8081/inner/authorizer-access-token?appid=${appid}`
   );
-  const data = await response.json();
+  const data = response.data;
   res.send(data);
 });
 
